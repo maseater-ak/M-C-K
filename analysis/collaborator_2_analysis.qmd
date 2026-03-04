@@ -1,5 +1,35 @@
 ---
 title: "collaborator_2_analysis"
+author: Carolynn Harris
 format: html
 ---
+
+## Exercise: Explore, Clean, and Wrangle Data
+
+# load libraries
+```{r}
+#| warning: false
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(here)
+```
+
+
+# data input
+```{r}
+# lobster_traps <- read_csv("/home/charris/M-C-K/data/Lobster_Trap_Counts_All_Years_20210519.csv")
+
+lobster_traps <- read_csv(here("data/Lobster_Trap_Counts_All_Years_20210519.csv"))
+lobster_traps <- read_csv("../data/Lobster_Trap_Counts_All_Years_20210519.csv")
+```
+
+# data explore 
+```{r}
+glimpse(lobster_traps)
+
+summary(lobster_traps)
+
+```
 
