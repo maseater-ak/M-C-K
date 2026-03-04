@@ -1,5 +1,36 @@
 ---
 title: "collaborator-analysis"
 format: html
+author: Kuba Oniszk
 ---
+
+# Exercise: Explore, Clean, and Wrangle Data
+
+```{r}
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(here)
+```
+
+Exploring data
+
+```{r}
+lobster_traps <- read_csv(here("data/Lobster_Trap_Counts_All_Years_20210519.csv"))
+
+lobster_traps <- read_csv("../data/Lobster_Trap_Counts_All_Years_20210519.csv")
+
+lobster_traps
+```
+
+
+
+
+
+
+
+
+
+
 
