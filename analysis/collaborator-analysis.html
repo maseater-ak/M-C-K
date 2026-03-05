@@ -174,6 +174,164 @@ date (1): DATE
 # ℹ 2 more variables: OBSERVER &lt;chr&gt;, NOTES &lt;chr&gt;</code></pre>
 </div>
 </div>
+<p>10.4 Converting missing values</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>lobster_traps <span class="ot">&lt;-</span> lobster_traps <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">TRAPS =</span> <span class="fu">na_if</span>(TRAPS, <span class="sc">-</span><span class="dv">99999</span>))</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(lobster_traps)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 11,071 × 10
+    YEAR MONTH DATE       FISHING_SEASON SITE  SEGMENT_START SEGMENT_END TRAPS
+   &lt;dbl&gt; &lt;dbl&gt; &lt;date&gt;     &lt;chr&gt;          &lt;chr&gt; &lt;chr&gt;         &lt;chr&gt;       &lt;dbl&gt;
+ 1  2012    10 2012-10-05 2012-2013      ABUR  119 44.950    119 44.900     16
+ 2  2012    10 2012-10-05 2012-2013      ABUR  119 44.900    119 44.850     13
+ 3  2012    10 2012-10-05 2012-2013      ABUR  119 44.850    119 44.800     21
+ 4  2012    10 2012-10-05 2012-2013      ABUR  119 44.800    119 44.750     10
+ 5  2012    10 2012-10-05 2012-2013      ABUR  119 44.750    119 44.700     10
+ 6  2012    10 2012-10-05 2012-2013      ABUR  119 44.700    119 44.650      6
+ 7  2012    10 2012-10-05 2012-2013      ABUR  119 44.650    119 44.600      2
+ 8  2012    10 2012-10-05 2012-2013      ABUR  119 44.600    119 44.550      0
+ 9  2012    10 2012-10-05 2012-2013      ABUR  119 44.550    119 44.500      5
+10  2012    10 2012-10-05 2012-2013      ABUR  119 44.500    119 44.450      7
+# ℹ 11,061 more rows
+# ℹ 2 more variables: OBSERVER &lt;chr&gt;, NOTES &lt;chr&gt;</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>not_napl <span class="ot">&lt;-</span> lobster_traps <span class="sc">%&gt;%</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(SITE <span class="sc">!=</span> <span class="st">"NAPL"</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>not_napl</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10,422 × 10
+    YEAR MONTH DATE       FISHING_SEASON SITE  SEGMENT_START SEGMENT_END TRAPS
+   &lt;dbl&gt; &lt;dbl&gt; &lt;date&gt;     &lt;chr&gt;          &lt;chr&gt; &lt;chr&gt;         &lt;chr&gt;       &lt;dbl&gt;
+ 1  2012    10 2012-10-05 2012-2013      ABUR  119 44.950    119 44.900     16
+ 2  2012    10 2012-10-05 2012-2013      ABUR  119 44.900    119 44.850     13
+ 3  2012    10 2012-10-05 2012-2013      ABUR  119 44.850    119 44.800     21
+ 4  2012    10 2012-10-05 2012-2013      ABUR  119 44.800    119 44.750     10
+ 5  2012    10 2012-10-05 2012-2013      ABUR  119 44.750    119 44.700     10
+ 6  2012    10 2012-10-05 2012-2013      ABUR  119 44.700    119 44.650      6
+ 7  2012    10 2012-10-05 2012-2013      ABUR  119 44.650    119 44.600      2
+ 8  2012    10 2012-10-05 2012-2013      ABUR  119 44.600    119 44.550      0
+ 9  2012    10 2012-10-05 2012-2013      ABUR  119 44.550    119 44.500      5
+10  2012    10 2012-10-05 2012-2013      ABUR  119 44.500    119 44.450      7
+# ℹ 10,412 more rows
+# ℹ 2 more variables: OBSERVER &lt;chr&gt;, NOTES &lt;chr&gt;</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>carp <span class="ot">&lt;-</span> lobster_traps <span class="sc">%&gt;%</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(SITE <span class="sc">==</span> <span class="st">"CARP"</span> <span class="sc">&amp;</span> TRAPS <span class="sc">&gt;</span> <span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">max</span>(lobster_traps<span class="sc">$</span>TRAPS, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 44</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>max_trap <span class="ot">&lt;-</span> lobster_traps <span class="sc">%&gt;%</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(TRAPS <span class="sc">!=</span> <span class="st">"NA"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(SITE, MONTH) <span class="sc">%&gt;%</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">MAX_TRAPS =</span> <span class="fu">max</span>(TRAPS, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'SITE'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>max_trap  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 55 × 3
+# Groups:   SITE [10]
+   SITE  MONTH MAX_TRAPS
+   &lt;chr&gt; &lt;dbl&gt;     &lt;dbl&gt;
+ 1 ABUR      1         7
+ 2 ABUR      2         5
+ 3 ABUR      3         3
+ 4 ABUR     10        21
+ 5 ABUR     11        16
+ 6 ABUR     12         8
+ 7 AHND      1         2
+ 8 AHND      2         2
+ 9 AHND      3         3
+10 AHND     10         6
+# ℹ 45 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="exercise-data-visualisation" class="level1">
+<h1>Exercise: Data Visualisation</h1>
+<section id="q5" class="level2">
+<h2 class="anchored" data-anchor-id="q5">Q5</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> lobster_traps, <span class="fu">aes</span>(<span class="at">x =</span> TRAPS)) <span class="sc">+</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>() <span class="sc">+</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> YEAR)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value `binwidth`.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 116 rows containing non-finite outside the scale range
+(`stat_bin()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="collaborator-analysis_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>lobsters_traps_summarise <span class="ot">&lt;-</span> lobster_traps <span class="sc">%&gt;%</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(SITE, YEAR) <span class="sc">%&gt;%</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">TOTAL_TRAPS =</span> <span class="fu">sum</span>(TRAPS, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'SITE'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> lobsters_traps_summarise, <span class="fu">aes</span>(<span class="at">y =</span> TOTAL_TRAPS, <span class="at">x =</span> YEAR)) <span class="sc">+</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">color =</span> SITE)) <span class="sc">+</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> SITE))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="collaborator-analysis_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>lobster_traps_fishing_pressure <span class="ot">&lt;-</span> lobster_traps <span class="sc">%&gt;%</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(YEAR <span class="sc">==</span> <span class="fu">c</span>(<span class="st">"2019"</span>, <span class="st">"2020"</span>, <span class="st">"2021"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">FISHING_PRESSURE =</span> <span class="fu">if_else</span>(TRAPS <span class="sc">&gt;=</span> <span class="dv">8</span>, <span class="st">"high"</span>, <span class="st">"low"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: There was 1 warning in `filter()`.
+ℹ In argument: `YEAR == c("2019", "2020", "2021")`.
+Caused by warning in `YEAR == c("2019", "2020", "2021")`:
+! longer object length is not a multiple of shorter object length</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>lobster_traps_fishing_pressure</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1,006 × 11
+    YEAR MONTH DATE       FISHING_SEASON SITE    SEGMENT_START SEGMENT_END TRAPS
+   &lt;dbl&gt; &lt;dbl&gt; &lt;date&gt;     &lt;chr&gt;          &lt;chr&gt;   &lt;chr&gt;         &lt;chr&gt;       &lt;dbl&gt;
+ 1  2019     1 2019-01-23 2018-2019      AHND    120 08.900    120 08.850      0
+ 2  2019     1 2019-01-23 2018-2019      AHND    120 08.750    120 08.700      0
+ 3  2019     1 2019-01-23 2018-2019      AHND    120 08.600    120 08.550      0
+ 4  2019     1 2019-01-23 2018-2019      AHND    120 08.450    120 08.400      2
+ 5  2019     1 2019-01-23 2018-2019      AHND    120 08.300    120 08.250      1
+ 6  2019     1 2019-01-23 2018-2019      AHND t… 120 08.150    120 08.100      0
+ 7  2019     1 2019-01-23 2018-2019      AHND t… 120 08.000    120 07.950      0
+ 8  2019     1 2019-01-23 2018-2019      AQUE    120 07.850    120 07.800      1
+ 9  2019     1 2019-01-23 2018-2019      AQUE    120 07.700    120 07.650      1
+10  2019     1 2019-01-23 2018-2019      AQUE    120 07.550    120 07.500      2
+# ℹ 996 more rows
+# ℹ 3 more variables: OBSERVER &lt;chr&gt;, NOTES &lt;chr&gt;, FISHING_PRESSURE &lt;chr&gt;</code></pre>
+</div>
+</div>
+</section>
 </section>
 
 </main>
