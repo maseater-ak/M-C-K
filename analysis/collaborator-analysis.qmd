@@ -25,11 +25,67 @@ lobster_traps
 ```
 
 
+10.4 Converting missing values
 
+```{r}
+lobster_traps <- lobster_traps %>%
+  mutate(TRAPS = na_if(TRAPS, -99999))
 
+unique(lobster_traps)
+```
 
+```{r}
+not_napl <- lobster_traps %>%
+  filter(SITE != "NAPL")
 
+not_napl
+```
 
+```{r}
+carp <- lobster_traps %>%
+  filter(SITE == "CARP" & TRAPS > 20)
+```
+
+```{r}
+max(lobster_traps$TRAPS, na.rm = TRUE)
+  
+max_trap <- lobster_traps %>%
+  filter(TRAPS != "NA") %>%
+  group_by(SITE, MONTH) %>%
+  summarise(MAX_TRAPS = max(TRAPS, na.rm = TRUE))
+  
+max_trap  
+  
+```
+
+# Exercise: Data Visualisation
+
+## Q5
+
+```{r}
+ggplot(data = lobster_traps, aes(x = TRAPS)) +
+  geom_histogram() +
+  facet_wrap(~ YEAR)
+```
+
+```{r}
+lobsters_traps_summarise <- lobster_traps %>%
+  group_by(SITE, YEAR) %>%
+  summarize(TOTAL_TRAPS = sum(TRAPS, na.rm = TRUE))
+```
+```{r}
+ggplot(data = lobsters_traps_summarise, aes(y = TOTAL_TRAPS, x = YEAR)) +
+  geom_line(aes(color = SITE)) +
+  geom_point(aes(color = SITE))
+```
+
+```{r}
+lobster_traps_fishing_pressure <- lobster_traps %>%
+  filter(YEAR == c("2019", "2020", "2021")) %>%
+  mutate(FISHING_PRESSURE = if_else(TRAPS >= 8, "high", "low"))
+
+lobster_traps_fishing_pressure
+```
 
 
 
