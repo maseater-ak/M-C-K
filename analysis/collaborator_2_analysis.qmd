@@ -33,3 +33,31 @@ summary(lobster_traps)
 
 ```
 
+# data cleaning 
+```{r}
+# traps code for missing is -99999, change to "NA"
+unique(lobster_traps$TRAPS)
+
+lobster_traps <- lobster_traps %>%
+  mutate(TRAPS = replace(TRAPS, TRAPS < 0, NA))
+
+unique(lobster_traps$TRAPS)
+str(lobster_traps$TRAPS)
+```
+
+
+# remove NAPLES REEF (NAPL)
+```{r}
+subset <- lobster_traps %>%
+  filter(SITE != "NAPL")
+
+unique(subset$SITE)
+
+subset2 <- lobster_traps %>%
+  filter(SITE == "CARP",
+         TRAPS > 20)
+unique(subset2$SITE)
+summary(subset2$TRAPS)
+
+```
+
