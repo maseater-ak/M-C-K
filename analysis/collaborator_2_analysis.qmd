@@ -105,13 +105,21 @@ low_site <- site_totals %>%
 
 # plot
 ggplot(total_traps, aes(x = YEAR, y = TOTAL_TRAPS, group = SITE)) +
-  geom_line(color = "grey80") + # all sites
-  geom_line(data = filter(total_traps, SITE == high_site), # max count site
-            color = "forestgreen",
+  # all sites
+  geom_line(color = "grey80") +
+  # highest site
+  geom_line(data = filter(total_traps, SITE == high_site),
+            aes(color = "CARP"),
             linewidth = 1.5) +
-  geom_line(data = filter(total_traps, SITE == low_site[1]), # min count site
-            color = "red",
+  # lowest site
+  geom_line(data = filter(total_traps, SITE == low_site[1]),
+            aes(color = "IVEE"),
             linewidth = 1.5) +
+  scale_color_manual(
+    name = "Highlighted Sites",
+    values = c("CARP" = "forestgreen",
+               "IVEE" = "red")
+  ) +
   theme_bw()
 ```
 
