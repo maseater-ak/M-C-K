@@ -1,5 +1,140 @@
 ---
 title: "collaborator_2_analysis"
+author: Carolynn Harris
 format: html
 ---
+
+## Exercise: Explore, Clean, and Wrangle Data
+
+### load libraries
+```{r}
+#| warning: false
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(here)
+```
+
+
+### data input
+```{r}
+# lobster_traps <- read_csv("/home/charris/M-C-K/data/Lobster_Trap_Counts_All_Years_20210519.csv")
+
+lobster_traps <- read_csv(here("data/Lobster_Trap_Counts_All_Years_20210519.csv"))
+lobster_traps <- read_csv("../data/Lobster_Trap_Counts_All_Years_20210519.csv")
+```
+
+### data explore 
+```{r}
+glimpse(lobster_traps)
+
+summary(lobster_traps)
+
+```
+
+### data cleaning 
+```{r}
+# traps code for missing is -99999, change to "NA"
+unique(lobster_traps$TRAPS)
+
+lobster_traps <- lobster_traps %>%
+  mutate(TRAPS = replace(TRAPS, TRAPS < 0, NA))
+
+unique(lobster_traps$TRAPS)
+str(lobster_traps$TRAPS)
+```
+
+
+### remove NAPLES REEF (NAPL)
+```{r}
+subset <- lobster_traps %>%
+  filter(SITE != "NAPL")
+
+unique(subset$SITE)
+
+subset2 <- lobster_traps %>%
+  filter(SITE == "CARP",
+         TRAPS > 20)
+unique(subset2$SITE)
+summary(subset2$TRAPS)
+
+```
+
+
+
+## data visualization
+
+### histogram
+```{r}
+
+str(lobster_traps$YEAR)
+
+ggplot(lobster_traps, aes(x = TRAPS)) +
+geom_histogram(aes(fill = YEAR)) +
+  facet_wrap(~ YEAR) +
+  theme_bw()
+```
+
+
+### line graph
+```{r}
+total_traps <- lobster_traps %>%
+  group_by(SITE, YEAR) %>%
+  summarise(TOTAL_TRAPS = sum(TRAPS, na.rm = T))
+
+ggplot(total_traps, aes(x = YEAR, y = TOTAL_TRAPS)) +
+  geom_line(aes(color = SITE)) + 
+  geom_point(aes(color = SITE)) + 
+  theme_bw()
+
+# pretty version
+
+# select lowest and highest SITES by sum of TOTAL TRAPS to use for plotting
+site_totals <- total_traps %>%
+  group_by(SITE) %>%
+  summarize(SUM_TRAPS = sum(TOTAL_TRAPS, na.rm = TRUE))
+
+high_site <- site_totals %>%
+  slice_max(SUM_TRAPS, n = 1) %>%
+  pull(SITE)
+
+low_site <- site_totals %>%
+  slice_min(SUM_TRAPS, n = 1) %>%
+  pull(SITE)
+
+# plot
+ggplot(total_traps, aes(x = YEAR, y = TOTAL_TRAPS, group = SITE)) +
+  geom_line(color = "grey80") + # all sites
+  geom_line(data = filter(total_traps, SITE == high_site), # max count site
+            color = "forestgreen",
+            linewidth = 1.5) +
+  geom_line(data = filter(total_traps, SITE == low_site[1]), # min count site
+            color = "red",
+            linewidth = 1.5) +
+  theme_bw()
+```
+
+
+### bar chart
+
+```{r}
+fish_pressure <- lobster_traps %>%
+  filter(YEAR %in% c(2019, 2020, 2021)) %>%
+  mutate(FISHING_PRESSURE = if_else(TRAPS > 8, "HIGH","LOW")) %>%
+  mutate(FISHING_PRESSURE = if_else(is.na(TRAPS), "LOW", FISHING_PRESSURE)) %>%
+  group_by(SITE, FISHING_PRESSURE) %>%
+  summarise(COUNT = n()) 
+  
+
+ggplot(fish_pressure, aes(x = FISHING_PRESSURE)) +
+  geom_bar(aes(fill = FISHING_PRESSURE)) +
+  theme_bw()
+
+ggplot(fish_pressure, aes(x = SITE, y = COUNT, fill = FISHING_PRESSURE)) +
+  geom_col() + 
+  theme_bw()
+         
+```
+
 
